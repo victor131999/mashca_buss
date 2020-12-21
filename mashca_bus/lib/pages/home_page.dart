@@ -7,13 +7,15 @@ class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() {
+    print("0. Crear el widget");
+    return _HomePageState();
+  }
 }
 
 class _HomePageState extends State<HomePage> {
   final PageStorageBucket _bucket = PageStorageBucket();
   int _selectedIndex = 0;
-  String _mainTitle = "My App Mascha Bus";
 
   final List<String> _titles = [
     'Tu ubicación',
@@ -35,25 +37,26 @@ class _HomePageState extends State<HomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
+      print("2. Cambia el widget");
       _selectedIndex = index;
     });
   }
 
   @override
+  void initState() {
+    print("1. Inicia el widget");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("3. Construye el widget");
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_mainTitle),
+        title: Text("Mashca Bus : " + _titles[_selectedIndex]),
       ),
       body: PageStorage(bucket: _bucket, child: _pages[_selectedIndex]),
-      floatingActionButton: FloatingActionButton(
-          child: Container(child: Icon(Icons.ac_unit)),
-          onPressed: () {
-            setState(() {
-              _mainTitle = _titles[_selectedIndex];
-            });
-          }),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

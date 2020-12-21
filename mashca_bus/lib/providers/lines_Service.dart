@@ -22,8 +22,26 @@ class LinesBusService {
     }
   }
 
+  Future<LineBus> _request(String url) async {
+    try {
+      final resp = await http.get(url);
+      if (resp.body.isEmpty) return null;
+      final decodedData = json.decode(resp.body);
+      final line = new LineBus.fromJsonMap(decodedData);
+      return line;
+    } on Exception catch (e) {
+      print("Exception $e");
+      return null;
+    }
+  }
+
   Future<LinesBus> getLines(int page, int limit) async {
     String path = "$_urlRoot/page/lines/$page/$limit";
     return await _requestList(path);
+  }
+
+  Future<LineBus> getLine(String id) async {
+    String path = "$_urlRoot/lines/$id";
+    return await _request(path);
   }
 }

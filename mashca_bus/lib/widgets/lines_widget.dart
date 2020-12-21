@@ -1,6 +1,6 @@
-  
 import 'package:flutter/material.dart';
 import 'package:mashca_bus/models/line_model.dart';
+import 'package:mashca_bus/pages/linebus_page.dart';
 import 'package:mashca_bus/providers/lines_service.dart';
 
 class LinesWidget extends StatefulWidget {
@@ -27,20 +27,36 @@ class _LinesWidgetState extends State<LinesWidget> {
         ? Center(child: Text("Cargando líneas de buses..."))
         : ListView(
             children: _list.items.map((e) {
-              return ListTile(
-                  trailing: Icon(Icons.arrow_drop_down),
-                  leading: Icon(Icons.airport_shuttle),
-                  title: Text(e.name),
-                  subtitle: Text(e.operate ?? ""));
-            }).toList(),
-          );
+            return _getLineBusItem(e);
+          }).toList());
   }
 
   _loadLinesBus() {
     _service.getLines(1, 10).then((value) {
-      _list = value;
-      print(_list);
-      setState(() {});
+      setState(() {
+        _list = value;
+      });
     });
+  }
+
+  Widget _getLineBusItem(LineBus line) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LineBusPage(idLineBus: line.idline),
+            ));
+      },
+      child: Card(
+        elevation: 2.0,
+        shadowColor: Theme.of(context).primaryColorDark,
+        child: ListTile(
+            trailing: Icon(Icons.arrow_right),
+            leading: Icon(Icons.airport_shuttle),
+            title: Text(line.name),
+            subtitle: Text(line.operate ?? "")),
+      ),
+    );
   }
 }
