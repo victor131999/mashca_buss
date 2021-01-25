@@ -4,8 +4,10 @@ import 'package:mashca_bus/models/line_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+import 'package:mashca_bus/utils/utils.dart';
+
 class LinesBusService {
-  String _urlRoot = "https://ejercicio-web-avanzado-7828.web.app/api";
+  String _urlRoot = urlRoot;
 
   LinesBusService();
 

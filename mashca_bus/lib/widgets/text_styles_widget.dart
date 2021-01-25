@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
-class TextStyles{
-
-static Widget labelLarge(String message, [Color color = Colors.black]){
-  return Text(message, style: TextStyle(
-              fontSize:25,
-              fontWeight:FontWeight.bold,
-              color: color
-  ));
-}
-
-
+class Labels {
+  static Widget headline3(BuildContext context, String message,
+      [Color color1 = Colors.black]) {
+    return Text(message,
+        style: Theme.of(context).textTheme.headline3.apply(color: color1));
+  }
 }

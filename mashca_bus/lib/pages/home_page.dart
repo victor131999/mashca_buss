@@ -53,23 +53,25 @@ class _HomePageState extends State<HomePage> {
     print("3. Construye el widget");
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text("Mashca Bus : " + _titles[_selectedIndex]),
-      ),
+          title: Text("Mashca Bus: " + _titles[_selectedIndex],
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1
+                  .apply(color: Colors.white))),
       body: PageStorage(bucket: _bucket, child: _pages[_selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.place),
-            title: Text('Tu ubicación'),
+            label: 'Tu ubicación',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.airport_shuttle),
-            title: Text('Líneas'),
+            label: 'Líneas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.mail_outline),
-            title: Text('Sugerencias'),
+            label: 'Sugerencias',
           ),
         ],
         currentIndex: _selectedIndex,
