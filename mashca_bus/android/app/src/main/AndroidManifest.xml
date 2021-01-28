@@ -9,6 +9,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="mashca_bus"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAH8GbNfQimZvNvdpzyAww_fCBqG6-_ArE"/>
+               
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

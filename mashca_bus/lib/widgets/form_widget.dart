@@ -15,28 +15,33 @@ class FormWidget extends StatefulWidget {
 
 class _FormWidgetState extends State<FormWidget> {
   final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   Report _report = new Report();
   String _typeValue = typesReport.elementAt(0); //'Sugerencia';
   ReportService _service = new ReportService();
-
   File _image;
   final picker = ImagePicker();
+  bool _onSaving = false;
 
   @override
   Widget build(BuildContext context) {
     _report.type = _typeValue;
-    return SingleChildScrollView(
-        child: Container(
-            margin: EdgeInsets.all(14.0),
-            child: Form(
-                key: formKey,
-                child: Column(children: [
-                  _showImage(),
-                  _getImageButtons(),
-                  _getFieldMessage(),
-                  _getTypesReport(),
-                  _getSubmitButton()
-                ]))));
+    return Scaffold(
+      key: scaffoldKey,
+      body: SingleChildScrollView(
+          child: Container(
+              margin: EdgeInsets.all(14.0),
+              child: Form(
+                  key: formKey,
+                  child: Column(children: [
+                    _showImage(),
+                    _getImageButtons(),
+                    _getFieldMessage(),
+                    _getTypesReport(),
+                    _getSubmitButton()
+                  ])))),
+    );
   }
 
   Widget _getFieldMessage() {
@@ -84,7 +89,9 @@ class _FormWidgetState extends State<FormWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(icon: Icon(Icons.send), onPressed: _submitForm)
+            IconButton(
+                icon: Icon(Icons.send),
+                onPressed: _onSaving ? null : _submitForm)
           ],
         ));
   }
@@ -108,6 +115,10 @@ class _FormWidgetState extends State<FormWidget> {
     //Vincula el valor de las controles del formulario a los atributos del modelo
     formKey.currentState.save();
 
+    setState(() {
+      _onSaving = true;
+    });
+
     if (_image != null) {
       _report.image = await _service.uploadImage(_image);
     }
@@ -116,18 +127,26 @@ class _FormWidgetState extends State<FormWidget> {
     _service.post(_report).then((value) {
       if (value != null) {
         formKey.currentState.reset();
-        Scaffold.of(context).showSnackBar(
+        _image = null;
+        scaffoldKey.currentState.showSnackBar(
           SnackBar(content: Text(value.text)),
         );
+        setState(() {
+          _onSaving = false;
+        });
       }
     });
   }
 
   _showImage() {
     if (_image != null) {
-      return Image.file(_image);
+      return Container(
+          height: MediaQuery.of(context).size.height * 0.2,
+          child: Image.file(_image));
     }
-    return Image.asset('assets/images/no-image.png');
+    return Container(
+        height: MediaQuery.of(context).size.height * 0.2,
+        child: Image.asset('assets/images/no-image.png'));
   }
 
   _pickupImage() {
